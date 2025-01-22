@@ -1,9 +1,10 @@
 from twilio.rest import Client
 import schedule
 import time
-from datetime import datetime
 import os
 from dotenv import load_dotenv
+from flask import Flask
+import threading
 
 # Load environment variables from .env file
 load_dotenv()
@@ -32,6 +33,22 @@ message_a =["NO MORE INTERNS !!!!!",
             "NO MORE STARTUP INVESTMENTS !!!!"]
 message_b = "Don't forget to check up on FAMILY (Mom, Dad, KC, Chiggy, Chi, and Donald)"
 
+
+# Flask web server
+app = Flask('')
+
+@app.route('/')
+def home():
+    return "Bot is running!"
+
+def run():
+    app.run(host='0.0.0.0', port=8080)
+
+def keep_alive():
+    thread = threading.Thread(target=run)
+    thread.start()
+
+
 # Function to send WhatsApp messages
 def send_whatsapp_message(message):
     try:
@@ -59,6 +76,10 @@ def schedule_messages():
 # Run the scheduler
 schedule_messages()
 print("Scheduler is running...")
+
+# Main loop to keep the bot running
+keep_alive()
+print("Bot is running...")
 
 while True:
     schedule.run_pending()
