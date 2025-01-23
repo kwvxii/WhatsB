@@ -63,15 +63,17 @@ def send_whatsapp_message(message):
 
 # Schedule messages
 def schedule_messages():
+    schedule.every(1).minutes.do(send_whatsapp_messages, message_a)
+
     # Weekdays (Monday to Friday)
-    schedule.every().monday.at("08:00").do(lambda: send_whatsapp_message(message_a))
-    schedule.every().tuesday.at("08:00").do(lambda: send_whatsapp_message(message_a))
-    schedule.every().wednesday.at("08:00").do(lambda: send_whatsapp_message(message_a))
-    schedule.every().thursday.at("08:20").do(lambda: send_whatsapp_message(message_a))
-    schedule.every().friday.at("08:00").do(lambda: send_whatsapp_message(message_a))
+    #schedule.every().monday.at("08:00").do(lambda: send_whatsapp_message(message_a))
+    #schedule.every().tuesday.at("08:00").do(lambda: send_whatsapp_message(message_a))
+    #schedule.every().wednesday.at("08:00").do(lambda: send_whatsapp_message(message_a))
+    #schedule.every().thursday.at("08:20").do(lambda: send_whatsapp_message(message_a))
+    #schedule.every().friday.at("08:00").do(lambda: send_whatsapp_message(message_a))
 
     # Weekends (Saturday)
-    schedule.every().saturday.at("12:00").do(lambda: send_whatsapp_message(message_b))
+    #schedule.every().saturday.at("12:00").do(lambda: send_whatsapp_message(message_b))
 
 def run_scheduler():
     print("Scheduler is running...")
@@ -79,13 +81,12 @@ def run_scheduler():
         schedule.run_pending()  # Check if any scheduled tasks are due
         time.sleep(1)  # Sleep to reduce CPU usage
 
-# Keep-alive function
-def keep_alive():
-    print("Keep-alive function is running...")
-    threading.Thread(target=run_web_server).start()
-
-# Run both Flask and scheduler in parallel
+# Use threading to run both the web server and scheduler
 if __name__ == '__main__':
     print("Bot is starting...")
-    keep_alive()  # Start the keep-alive server
+    
+    # Start the web server in a separate thread
+    threading.Thread(target=run_web_server).start()
+    
+    # Start the scheduler in the main thread
     run_scheduler()
