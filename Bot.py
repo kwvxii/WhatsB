@@ -67,7 +67,7 @@ def schedule_messages():
     schedule.every().monday.at("08:00").do(lambda: send_whatsapp_message(message_a))
     schedule.every().tuesday.at("08:00").do(lambda: send_whatsapp_message(message_a))
     schedule.every().wednesday.at("08:00").do(lambda: send_whatsapp_message(message_a))
-    schedule.every().thursday.at("08:00").do(lambda: send_whatsapp_message(message_a))
+    schedule.every().thursday.at("08:20").do(lambda: send_whatsapp_message(message_a))
     schedule.every().friday.at("08:00").do(lambda: send_whatsapp_message(message_a))
 
     # Weekends (Saturday)
