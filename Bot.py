@@ -44,9 +44,9 @@ def home():
 def run():
     app.run(host='0.0.0.0', port=8080)
 
-def keep_alive():
-    thread = threading.Thread(target=run)
-    thread.start()
+def run_web_server():
+    print("Starting web server...")
+    app.run(host='0.0.0.0', port=8080)
 
 
 # Function to send WhatsApp messages
@@ -73,14 +73,19 @@ def schedule_messages():
     # Weekends (Saturday)
     schedule.every().saturday.at("12:00").do(lambda: send_whatsapp_message(message_b))
 
-# Run the scheduler
-schedule_messages()
-print("Scheduler is running...")
+def run_scheduler():
+    print("Scheduler is running...")
+    while True:
+        schedule.run_pending()  # Check if any scheduled tasks are due
+        time.sleep(1)  # Sleep to reduce CPU usage
 
-# Main loop to keep the bot running
-keep_alive()
-print("Bot is running...")
+# Keep-alive function
+def keep_alive():
+    print("Keep-alive function is running...")
+    threading.Thread(target=run_web_server).start()
 
-while True:
-    schedule.run_pending()
-    time.sleep(1)
+# Run both Flask and scheduler in parallel
+if __name__ == '__main__':
+    print("Bot is starting...")
+    keep_alive()  # Start the keep-alive server
+    run_scheduler()
